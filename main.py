@@ -29,7 +29,7 @@ class Reader(QMainWindow, Ui_SCEReader):
         scePath, _  = QFileDialog.getOpenFileName(
             self,             
             "选择SCE文件",
-            r"c:\\",
+            os.getcwd(),
             "文件类型 (*.sce)"
         )
         self.sce_route.setText(scePath)
@@ -38,7 +38,6 @@ class Reader(QMainWindow, Ui_SCEReader):
     def load_sce_list(self):
         #从sce加载列表显示在左侧表格
         if self.sce_route.text() == '':
-            self.sce_table.setRowCount(0)
             return
         ev_li = DialogueSections.sce_handler(self.sce_route.text())
         self.src_talk = ev_li
