@@ -1,12 +1,15 @@
+import ctypes
 import os
 import sys
 
 from PySide2.QtCore import *
 from PySide2.QtGui import *
 from PySide2.QtWidgets import *
-from ui_reader import Ui_SCEReader
-from dictionary import chara_li
+
 from dialogue_sections import DialogueSections
+from dictionary import chara_li
+from ui_reader import Ui_SCEReader
+
 
 class Reader(QMainWindow, Ui_SCEReader):
     if getattr(sys, 'frozen', False):
@@ -63,6 +66,10 @@ class Reader(QMainWindow, Ui_SCEReader):
         self.sce_table.setCurrentCell(0,0)
 
 if __name__ == '__main__':
+    ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("myappid")
+    if sys.platform.startswith('win'):
+        ctypes.windll.user32.SetProcessDPIAware()
+    QApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
     app = QApplication(sys.argv)
     stats = Reader()
     stats.show()
