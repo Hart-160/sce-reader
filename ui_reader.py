@@ -1,30 +1,23 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'reader.ui'
+## Form generated from reading UI file 'readerfXeCKB.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.4.2
+## Created by: Qt User Interface Compiler version 5.15.2
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-    QMetaObject, QObject, QPoint, QRect,
-    QSize, QTime, QUrl, Qt)
-from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
-    QFont, QFontDatabase, QGradient, QIcon,
-    QImage, QKeySequence, QLinearGradient, QPainter,
-    QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QHBoxLayout, QHeaderView, QLabel,
-    QLayout, QLineEdit, QMainWindow, QPushButton,
-    QSizePolicy, QTableWidget, QTableWidgetItem, QVBoxLayout,
-    QWidget)
+from PySide2.QtCore import *
+from PySide2.QtGui import *
+from PySide2.QtWidgets import *
+
 
 class Ui_SCEReader(object):
     def setupUi(self, SCEReader):
         if not SCEReader.objectName():
             SCEReader.setObjectName(u"SCEReader")
-        SCEReader.resize(450, 300)
+        SCEReader.resize(600, 300)
         sizePolicy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -33,7 +26,7 @@ class Ui_SCEReader(object):
         SCEReader.setMinimumSize(QSize(450, 0))
         SCEReader.setMaximumSize(QSize(16777215, 16777215))
         font = QFont()
-        font.setFamilies([u"\u5fae\u8f6f\u96c5\u9ed1"])
+        font.setFamily(u"\u5fae\u8f6f\u96c5\u9ed1")
         font.setPointSize(10)
         SCEReader.setFont(font)
         self.centralwidget = QWidget(SCEReader)
@@ -46,10 +39,7 @@ class Ui_SCEReader(object):
         self.verticalLayout = QVBoxLayout(self.centralwidget)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.horizontalLayout = QHBoxLayout()
-        self.horizontalLayout.setSpacing(5)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.horizontalLayout.setSizeConstraint(QLayout.SetDefaultConstraint)
-        self.horizontalLayout.setContentsMargins(-1, -1, 0, -1)
         self.label = QLabel(self.centralwidget)
         self.label.setObjectName(u"label")
         sizePolicy2 = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
@@ -59,9 +49,10 @@ class Ui_SCEReader(object):
         self.label.setSizePolicy(sizePolicy2)
         self.label.setMaximumSize(QSize(80, 30))
         font1 = QFont()
-        font1.setFamilies([u"\u5fae\u8f6f\u96c5\u9ed1"])
+        font1.setFamily(u"\u5fae\u8f6f\u96c5\u9ed1")
         font1.setPointSize(10)
         font1.setBold(False)
+        font1.setWeight(50)
         self.label.setFont(font1)
 
         self.horizontalLayout.addWidget(self.label)
@@ -88,6 +79,16 @@ class Ui_SCEReader(object):
 
         self.horizontalLayout.addWidget(self.choose_sce)
 
+        self.template_generate = QPushButton(self.centralwidget)
+        self.template_generate.setObjectName(u"template_generate")
+        sizePolicy2.setHeightForWidth(self.template_generate.sizePolicy().hasHeightForWidth())
+        self.template_generate.setSizePolicy(sizePolicy2)
+        self.template_generate.setMinimumSize(QSize(90, 30))
+        self.template_generate.setMaximumSize(QSize(90, 30))
+        self.template_generate.setFont(font)
+
+        self.horizontalLayout.addWidget(self.template_generate)
+
 
         self.verticalLayout.addLayout(self.horizontalLayout)
 
@@ -109,6 +110,7 @@ class Ui_SCEReader(object):
 
         SCEReader.setCentralWidget(self.centralwidget)
 
+        self.setAcceptDrops(True)
         self.retranslateUi(SCEReader)
 
         QMetaObject.connectSlotsByName(SCEReader)
@@ -118,5 +120,6 @@ class Ui_SCEReader(object):
         SCEReader.setWindowTitle(QCoreApplication.translate("SCEReader", u"SCE Reader", None))
         self.label.setText(QCoreApplication.translate("SCEReader", u"SCE\u6587\u4ef6\uff1a", None))
         self.choose_sce.setText(QCoreApplication.translate("SCEReader", u"\u8f7d\u5165\u6587\u4ef6", None))
+        self.template_generate.setText(QCoreApplication.translate("SCEReader", u"\u6a21\u677f\u751f\u6210", None))
     # retranslateUi
 
