@@ -9,6 +9,9 @@ utils/__pycache__/
 
 *.exe
 
+# 本repo用到的gitignore
+settings/
+
 # Distribution / packaging
 .Python
 build/

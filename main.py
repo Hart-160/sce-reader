@@ -1,6 +1,7 @@
 import ctypes
 import os
 import sys
+import json
 
 from PySide2.QtCore import *
 from PySide2.QtGui import *
@@ -19,6 +20,31 @@ def rename(path_name,new_name):
         if e.args[0] ==17: #重命名
             fname, fename = os.path.splitext(new_name)
             rename(path_name, fname+"-1"+fename)
+
+class Configs:
+    #记录配置用
+    PREFERRED_SCE_PATH = 'PreferredSCEPath'
+    FONT_SIZE = 'FontSize'
+    
+    def config_creator():
+        data = {
+            Configs.PREFERRED_SCE_PATH:'',
+            Configs.FONT_SIZE:20
+        }
+        with open('settings\\setting.json', 'w+', encoding='utf-8') as f:
+            json.dump(data, f, indent=4)
+
+    def config_reader(parameter):
+        with open('settings\\setting.json', 'r+', encoding='utf-8') as f:
+            data = json.load(f)
+        return data[parameter]
+
+    def config_editor(parameter, input):
+        with open('settings\\setting.json', 'r+', encoding='utf-8') as f:
+            data = json.load(f)
+        data[parameter] = input
+        with open('settings\\setting.json', 'w+', encoding='utf-8') as f:
+             json.dump(data, f, indent=4)
 
 class Reader(QMainWindow, Ui_SCEReader):
     if getattr(sys, 'frozen', False):
@@ -39,6 +65,9 @@ class Reader(QMainWindow, Ui_SCEReader):
         self.sce_table = self.sce_loader
         self.src_talk = []
 
+        self.font_size = Configs.config_reader(Configs.FONT_SIZE)
+        Reader.setFontSize(self, self.font_size)
+
     def dragEnterEvent(self, e):
         if e.mimeData().hasText():
             e.accept()
@@ -55,17 +84,61 @@ class Reader(QMainWindow, Ui_SCEReader):
         else:
             return
 
+    def wheelEvent(self, event):
+        # 捕捉鼠标滚轮事件
+        modifiers = QApplication.keyboardModifiers()
+        
+        if modifiers == Qt.ControlModifier:
+            # 如果按下了 Ctrl 键
+            delta = event.angleDelta().y()
+            font = self.sce_loader.font()
+            font.setPixelSize(self.font_size)
+ 
+            # 根据滚轮方向调整字体大小
+            if delta > 0:
+                if self.font_size < 60:
+                    self.font_size += 2
+                    Reader.setFontSize(self, self.font_size)
+            else:
+                if self.font_size > 20:
+                    self.font_size -= 2
+                    Reader.setFontSize(self, self.font_size)
+
+            Configs.config_editor(Configs.FONT_SIZE, self.font_size)
+            
+        else:
+            # 如果没有按下 Ctrl 键，则使用默认滚轮事件处理
+            super().wheelEvent(event)
+
+    def setFontSize(self, fontSize):
+        self.fontSize = fontSize
+        if(not self.sce_loader):
+            return
+        font = self.sce_loader.font()
+        font.setPixelSize(self.fontSize)
+        self.sce_loader.setFont(font)
+        self.sce_loader.horizontalHeader().resizeSection(0, self.fontSize * 7)
+
+        for row in range(self.sce_loader.rowCount()):
+            text = self.sce_loader.item(row, 1).text()
+            height = len(text.split('\n'))
+            self.sce_loader.setRowHeight(row, 40 + (20 + self.fontSize) * height)
+
     def select_sce(self):
         #选择sce文件
+        config_sce_path = Configs.config_reader(Configs.PREFERRED_SCE_PATH)
+        if config_sce_path == '':
+            config_sce_path = r"C:\\"
         scePath, _  = QFileDialog.getOpenFileName(
             self,             
             "选择SCE文件",
-            os.getcwd(),
+            config_sce_path,
             "文件类型 (*.sce)"
         )
         if scePath == '':
             return
         self.sce_route.setText(scePath)
+        Configs.config_editor(Configs.PREFERRED_SCE_PATH, os.path.split(scePath)[0])
         self.load_sce_list()
 
     def load_sce_list(self):
@@ -113,6 +186,12 @@ if __name__ == '__main__':
     if sys.platform.startswith('win'):
         ctypes.windll.user32.SetProcessDPIAware()
     QApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
+    
+    if not os.path.exists('settings'):
+        os.makedirs('settings')
+    if not os.path.exists('settings\\setting.json'):
+        Configs.config_creator()
+    
     app = QApplication(sys.argv)
     stats = Reader()
     stats.show()
