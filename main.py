@@ -65,9 +65,6 @@ class Reader(QMainWindow, Ui_SCEReader):
         self.sce_table = self.sce_loader
         self.src_talk = []
 
-        self.font_size = Configs.config_reader(Configs.FONT_SIZE)
-        Reader.setFontSize(self, self.font_size)
-
     def dragEnterEvent(self, e):
         if e.mimeData().hasText():
             e.accept()
@@ -140,6 +137,8 @@ class Reader(QMainWindow, Ui_SCEReader):
         self.sce_route.setText(scePath)
         Configs.config_editor(Configs.PREFERRED_SCE_PATH, os.path.split(scePath)[0])
         self.load_sce_list()
+        self.font_size = Configs.config_reader(Configs.FONT_SIZE)
+        Reader.setFontSize(self, self.font_size)
 
     def load_sce_list(self):
         #从sce加载列表显示在左侧表格
