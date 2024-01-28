@@ -77,7 +77,10 @@ class Reader(QMainWindow, Ui_SCEReader):
         filePath = filePath.replace('file:///', '', 1) #去除文件地址前缀的特定字符
         if filePath.endswith('.sce'):
             self.sce_route.setText(filePath)
+            Configs.config_editor(Configs.PREFERRED_SCE_PATH, os.path.split(filePath)[0])
             self.load_sce_list()
+            self.font_size = Configs.config_reader(Configs.FONT_SIZE)
+            Reader.setFontSize(self, self.font_size)
         else:
             return
 

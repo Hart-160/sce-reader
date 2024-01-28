@@ -11,6 +11,8 @@ utils/__pycache__/
 
 # 本repo用到的gitignore
 settings/
+*.bat
+update_git.py
 
 # Distribution / packaging
 .Python
