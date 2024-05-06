@@ -17,7 +17,6 @@ class Ui_SCEReader(object):
     def setupUi(self, SCEReader):
         if not SCEReader.objectName():
             SCEReader.setObjectName(u"SCEReader")
-        SCEReader.resize(600, 300)
         sizePolicy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)

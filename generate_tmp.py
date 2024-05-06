@@ -73,6 +73,7 @@ class TemplateUtils:
                         continue
             if write_data.startswith('\n'):
                 write_data = write_data.replace('\n', '', 1)
+                write_data = write_data.rstrip()
             f.write(write_data)
                     
     def clean_sce(pth) -> str:

@@ -161,6 +161,7 @@ class DialogueSections:
                     else:
                         tit = Subtitle(index, title_body)
                     event_list.append(tit.get_dict())
+                    index += 1
 
                 if line.startswith('\ufeff{ Main'):
                     continue

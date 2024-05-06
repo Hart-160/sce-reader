@@ -5,6 +5,7 @@ import json
 
 from PySide2.QtCore import *
 from PySide2.QtGui import *
+from PySide2.QtGui import QCloseEvent
 from PySide2.QtWidgets import *
 
 from dialogue_sections import DialogueSections
@@ -25,11 +26,19 @@ class Configs:
     #记录配置用
     PREFERRED_SCE_PATH = 'PreferredSCEPath'
     FONT_SIZE = 'FontSize'
+    X_VALUE = 'XValue'
+    Y_VALUE = 'YValue'
+    WIDTH = 'Width'
+    HEIGHT = 'Height'
     
     def config_creator():
         data = {
             Configs.PREFERRED_SCE_PATH:'',
-            Configs.FONT_SIZE:20
+            Configs.FONT_SIZE:20,
+            Configs.X_VALUE:660,
+            Configs.Y_VALUE:340,
+            Configs.WIDTH:600,
+            Configs.HEIGHT:400
         }
         with open('settings\\setting.json', 'w+', encoding='utf-8') as f:
             json.dump(data, f, indent=4)
@@ -44,7 +53,7 @@ class Configs:
             data = json.load(f)
         data[parameter] = input
         with open('settings\\setting.json', 'w+', encoding='utf-8') as f:
-             json.dump(data, f, indent=4)
+            json.dump(data, f, indent=4)
 
 class Reader(QMainWindow, Ui_SCEReader):
     if getattr(sys, 'frozen', False):
@@ -54,6 +63,10 @@ class Reader(QMainWindow, Ui_SCEReader):
 
     def __init__(self):
         super(Reader, self).__init__()
+        
+        self.move(Configs.config_reader(Configs.X_VALUE), Configs.config_reader(Configs.Y_VALUE))
+        self.resize(Configs.config_reader(Configs.WIDTH), Configs.config_reader(Configs.HEIGHT))
+        
         icon = QPixmap()
         icon.loadFromData(B64_Images.get_b64_icon(B64_Images.READER_ICON_B64))
         self.setWindowIcon(icon)
@@ -182,6 +195,13 @@ class Reader(QMainWindow, Ui_SCEReader):
             new_name = '\\[TEMPLATE] ' + sole_name + '.txt'
             rename(rout + '\\' + sole_name + '.txt', rout + new_name)
             QMessageBox.information(self, '任务完成', '模板已成功生成！', QMessageBox.Ok, QMessageBox.Ok)
+
+    def closeEvent(self, event: QCloseEvent):
+        Configs.config_editor(Configs.X_VALUE, QMainWindow.frameGeometry(self).x())
+        Configs.config_editor(Configs.Y_VALUE, QMainWindow.frameGeometry(self).y())
+        Configs.config_editor(Configs.WIDTH, QMainWindow.frameGeometry(self).width())
+        Configs.config_editor(Configs.HEIGHT, QMainWindow.frameGeometry(self).height())
+        return super().closeEvent(event)
 
 if __name__ == '__main__':
     ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("myappid")

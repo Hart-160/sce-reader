@@ -13,6 +13,9 @@ utils/__pycache__/
 settings/
 *.bat
 update_git.py
+*test*.py
+*test*.ui
+*[Aa]*.txt
 
 # Distribution / packaging
 .Python
