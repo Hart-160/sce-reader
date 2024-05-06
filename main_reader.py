@@ -42,19 +42,19 @@ class Configs:
             Configs.HEIGHT:400,
             Configs.IS_MAXIMIZED:False
         }
-        with open('settings\\setting.json', 'w+', encoding='utf-8') as f:
+        with open('settings\\setting_reader.json', 'w+', encoding='utf-8') as f:
             json.dump(data, f, indent=4)
 
     def config_reader(parameter):
-        with open('settings\\setting.json', 'r+', encoding='utf-8') as f:
+        with open('settings\\setting_reader.json', 'r+', encoding='utf-8') as f:
             data = json.load(f)
         return data[parameter]
 
     def config_editor(parameter, input):
-        with open('settings\\setting.json', 'r+', encoding='utf-8') as f:
+        with open('settings\\setting_reader.json', 'r+', encoding='utf-8') as f:
             data = json.load(f)
         data[parameter] = input
-        with open('settings\\setting.json', 'w+', encoding='utf-8') as f:
+        with open('settings\\setting_reader.json', 'w+', encoding='utf-8') as f:
             json.dump(data, f, indent=4)
 
 class Reader(QMainWindow, Ui_SCEReader):
@@ -214,7 +214,7 @@ if __name__ == '__main__':
     
     if not os.path.exists('settings'):
         os.makedirs('settings')
-    if not os.path.exists('settings\\setting.json'):
+    if not os.path.exists('settings\\setting_reader.json'):
         Configs.config_creator()
     
     app = QApplication(sys.argv)
