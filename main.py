@@ -30,6 +30,7 @@ class Configs:
     Y_VALUE = 'YValue'
     WIDTH = 'Width'
     HEIGHT = 'Height'
+    IS_MAXIMIZED = 'IsMaximized'
     
     def config_creator():
         data = {
@@ -38,7 +39,8 @@ class Configs:
             Configs.X_VALUE:660,
             Configs.Y_VALUE:340,
             Configs.WIDTH:600,
-            Configs.HEIGHT:400
+            Configs.HEIGHT:400,
+            Configs.IS_MAXIMIZED:False
         }
         with open('settings\\setting.json', 'w+', encoding='utf-8') as f:
             json.dump(data, f, indent=4)
@@ -201,6 +203,7 @@ class Reader(QMainWindow, Ui_SCEReader):
         Configs.config_editor(Configs.Y_VALUE, QMainWindow.frameGeometry(self).y())
         Configs.config_editor(Configs.WIDTH, QMainWindow.frameGeometry(self).width())
         Configs.config_editor(Configs.HEIGHT, QMainWindow.frameGeometry(self).height())
+        Configs.config_editor(Configs.IS_MAXIMIZED, self.isMaximized())
         return super().closeEvent(event)
 
 if __name__ == '__main__':
@@ -216,5 +219,7 @@ if __name__ == '__main__':
     
     app = QApplication(sys.argv)
     stats = Reader()
+    if Configs.config_reader(Configs.IS_MAXIMIZED):
+        stats.showMaximized()
     stats.show()
     app.exec_()
