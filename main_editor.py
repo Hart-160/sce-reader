@@ -291,7 +291,7 @@ class TranslateEditor(QMainWindow, Ui_SCETranslateEditor):
             
         self.sce_table.setCurrentItem(self.sce_table.item(0, 1))
         self.saved = True
-        self.setWindowTitle('SCE Reader')
+        self.setWindowTitle('SCE Translate Editor')
         logging.info('SCE Table Loaded')
     
     def generateTemplate(self):
@@ -394,7 +394,7 @@ class TranslateEditor(QMainWindow, Ui_SCETranslateEditor):
         TranslateEditor.setTemplateFontSize(self, self.font_size)
         self.template_table.setCurrentItem(self.template_table.item(0, 2))
         self.saved = True
-        self.setWindowTitle('SCE Reader')
+        self.setWindowTitle('SCE Translate Editor')
         logging.info('Template Table Loaded')
     
     def add_line(self):
@@ -531,7 +531,7 @@ class TranslateEditor(QMainWindow, Ui_SCETranslateEditor):
         else:
             self.save_file(self.template_route.text())
             self.saved = True
-            self.setWindowTitle('SCE Reader')
+            self.setWindowTitle('SCE Translate Editor')
             logging.info('Template File Saved')
 
     def change_text(self, item):
@@ -544,7 +544,7 @@ class TranslateEditor(QMainWindow, Ui_SCETranslateEditor):
                 self.template_table.editItem(nextItem)
         
         self.saved = False
-        self.setWindowTitle('SCE Reader - [未保存]')
+        self.setWindowTitle('SCE Translate Editor - [未保存]')
         self.save_file(os.path.join(os.getcwd(), 'settings/[Auto-Save].txt'))
 
     def clear_template_table(self):
@@ -567,7 +567,7 @@ class TranslateEditor(QMainWindow, Ui_SCETranslateEditor):
                     self.template_route.setText('')
                     self.dst_talk = []
                 self.saved = True
-                self.setWindowTitle('SCE Reader')
+                self.setWindowTitle('SCE Translate Editor')
                 logging.info('Template Table Cleared by Button')
 
     def check_save(self) -> bool:
@@ -597,7 +597,7 @@ class TranslateEditor(QMainWindow, Ui_SCETranslateEditor):
         Configs.config_editor(Configs.HEIGHT, QMainWindow.frameGeometry(self).height())
         Configs.config_editor(Configs.IS_MAXIMIZED, self.isMaximized())
         logging.info('Window Info Saved')
-        exit(0)
+        event.accept()
 
     def pop_error(self, status_code:int):
         if status_code == -1:
@@ -612,13 +612,14 @@ if __name__ == '__main__':
     
     if not os.path.exists('settings'):
         os.makedirs('settings')
-    if not os.path.exists('settings\\setting_editor.json'):
-        Configs.config_creator()
         
     logging.basicConfig(filename='settings\\log.txt', filemode='w', level=logging.INFO)
     logger = logging.getLogger(__name__)
     handler = logging.StreamHandler(stream=sys.stdout)
     logger.addHandler(handler)
+    
+    if not os.path.exists('settings\\setting_editor.json'):
+        Configs.config_creator()
     
     app = QApplication(sys.argv)
     stats = TranslateEditor()

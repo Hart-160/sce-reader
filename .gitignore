@@ -16,6 +16,7 @@ update_git.py
 *test*.py
 *test*.ui
 *[Aa]*.txt
+*ui.py
 
 # Distribution / packaging
 .Python

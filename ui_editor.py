@@ -208,7 +208,7 @@ class Ui_SCETranslateEditor(object):
     # setupUi
 
     def retranslateUi(self, SCEReader):
-        SCEReader.setWindowTitle(QCoreApplication.translate("SCEReader", u"SCE Reader", None))
+        SCEReader.setWindowTitle(QCoreApplication.translate("SCEReader", u"SCE Translate Editor", None))
         self.label.setText(QCoreApplication.translate("SCEReader", u"SCE\u6587\u4ef6\uff1a", None))
         self.choose_sce.setText(QCoreApplication.translate("SCEReader", u"\u8f7d\u5165\u6587\u4ef6", None))
         self.template_generate.setText(QCoreApplication.translate("SCEReader", u"\u6a21\u677f\u751f\u6210", None))
