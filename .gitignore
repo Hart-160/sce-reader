@@ -15,7 +15,7 @@ settings/
 update_git.py
 *test*.py
 *test*.ui
-*[Aa]*.txt
+*.txt
 *ui.py
 
 # Distribution / packaging

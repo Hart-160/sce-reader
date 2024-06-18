@@ -71,6 +71,11 @@ class TranslateEditor(QMainWindow, Ui_SCETranslateEditor):
         
     error_message = Signal(int) #告知GUI出现错误，弹出提示框
 
+    #原文会出现的不太好打出来的特殊字符
+    SPECIAL_SYMBOLS = [
+        '♪', '☆', '「', '」', '『', '』', '♡', '〇', '℃', '■', '★'
+    ]
+
     def __init__(self):
         super(TranslateEditor, self).__init__()
         
@@ -125,11 +130,17 @@ class TranslateEditor(QMainWindow, Ui_SCETranslateEditor):
             self.font_size = Configs.config_reader(Configs.FONT_SIZE)
             TranslateEditor.setFontSize(self, self.font_size)
             if self.dst_talk == []:
+                self.template_route.setText(os.path.split(filePath)[0] + '/[TEMPLATE] ' + os.path.split(filePath)[1][:-4] + '.txt')
+                self.template_table.clearContents()
+                self.load_template_list_from_table()
+            elif self.is_empty_text():
+                self.template_route.setText(os.path.split(filePath)[0] + '/[TEMPLATE] ' + os.path.split(filePath)[1][:-4] + '.txt')
                 self.template_table.clearContents()
                 self.load_template_list_from_table()
             else:
                 res = QMessageBox.question(self, '警告', '是否清空当前模板？', QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
                 if res == QMessageBox.Yes:
+                    self.template_route.setText(os.path.split(filePath)[0] + '/[TEMPLATE] ' + os.path.split(filePath)[1][:-4] + '.txt')
                     self.template_table.clearContents()
                     self.load_template_list_from_table()
 
@@ -255,11 +266,17 @@ class TranslateEditor(QMainWindow, Ui_SCETranslateEditor):
         self.font_size = Configs.config_reader(Configs.FONT_SIZE)
         TranslateEditor.setFontSize(self, self.font_size)
         if self.dst_talk == []:
+            self.template_route.setText(os.path.split(scePath)[0] + '/[TEMPLATE] ' + os.path.split(scePath)[1][:-4] + '.txt')
+            self.template_table.clearContents()
+            self.load_template_list_from_table()
+        elif self.is_empty_text():
+            self.template_route.setText(os.path.split(scePath)[0] + '/[TEMPLATE] ' + os.path.split(scePath)[1][:-4] + '.txt')
             self.template_table.clearContents()
             self.load_template_list_from_table()
         else:
             res = QMessageBox.question(self, '警告', '是否清空当前模板？', QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
             if res == QMessageBox.Yes:
+                self.template_route.setText(os.path.split(scePath)[0] + '/[TEMPLATE] ' + os.path.split(scePath)[1][:-4] + '.txt')
                 self.template_table.clearContents()
                 self.load_template_list_from_table()
 
@@ -294,6 +311,16 @@ class TranslateEditor(QMainWindow, Ui_SCETranslateEditor):
         self.setWindowTitle('SCE Translate Editor')
         logging.info('SCE Table Loaded')
     
+    def is_empty_text(self) -> bool:
+        #判断dst_talk是否无文本
+        for talk in self.dst_talk:
+            for char in talk['Body']:
+                if char in TranslateEditor.SPECIAL_SYMBOLS:
+                    talk['Body'] = talk['Body'].replace(char, '')
+            if talk['Body'] != '':
+                return False
+        return True
+    
     def generateTemplate(self):
         #生成翻译模板
         sce = self.sce_route.text()
@@ -326,6 +353,9 @@ class TranslateEditor(QMainWindow, Ui_SCETranslateEditor):
                 body = talk['Body'].split('\n')
                 for i in range(len(body)):
                     new_talk = {'Index':talk['Index'], 'EventType':talk['EventType'], 'Talker':'', 'Body':''}
+                    for char in body[i]:
+                        if char in TranslateEditor.SPECIAL_SYMBOLS:
+                            new_talk['Body'] += char
                     if i == 0:
                         new_talk['Talker'] = talk['Talker']
                         new_talk['Start'] = True
