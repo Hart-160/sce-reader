@@ -560,9 +560,28 @@ class TranslateEditor(QMainWindow, Ui_SCETranslateEditor):
             logging.warning('No Template file input')
         else:
             self.save_file(self.template_route.text())
+            self.template_loader.itemChanged.emit(self.template_loader.currentItem())
+            self.copy_autosave_to_file(self.template_route.text())
             self.saved = True
             self.setWindowTitle('SCE Translate Editor')
             logging.info('Template File Saved')
+
+    def copy_autosave_to_file(self, file_path):
+        with open(os.path.join(os.getcwd(), 'settings/[Auto-Save].txt'), 'r', encoding='utf-8') as f:
+            autosave = f.readlines()
+        with open(file_path, 'r', encoding='utf-8') as g:
+            lines = g.readlines()
+        if not len(autosave) == len(lines):
+            return
+        for i in range(len(autosave)):
+            if not autosave[i][0] == lines[i][0]:
+                return
+        for i in range(len(lines)):
+            if not lines[i] == autosave[i]:
+                lines[i] = autosave[i]
+        with open(file_path, 'w', encoding='utf-8') as h:
+            h.writelines(lines)
+            logging.info('Auto-Save Copied to File')
 
     def change_text(self, item):
         if item.column() == 2:
@@ -627,6 +646,8 @@ class TranslateEditor(QMainWindow, Ui_SCETranslateEditor):
         Configs.config_editor(Configs.HEIGHT, QMainWindow.frameGeometry(self).height())
         Configs.config_editor(Configs.IS_MAXIMIZED, self.isMaximized())
         logging.info('Window Info Saved')
+        self.template_loader.itemChanged.emit(self.template_loader.currentItem())
+        self.copy_autosave_to_file(self.template_route.text())
         event.accept()
 
     def pop_error(self, status_code:int):
