@@ -453,6 +453,8 @@ class TranslateEditor(QMainWindow, Ui_SCETranslateEditor):
             row = self.template_table.indexAt(tablecell.pos()).row()
             if row > 0:
                 self.dst_talk[row - 1]['End'] = True
+                if self.dst_talk[row]['Body'] != '':
+                    self.dst_talk[row - 1]['Body'] += self.dst_talk[row]['Body']
             self.dst_talk.pop(row)
 
             self.template_table.clearContents()
